@@ -1,5 +1,5 @@
 import bcrypt
-from sqlalchemy import text
+from repository import get_hashed_password
 
 
 class RegisterModel:
@@ -31,37 +31,13 @@ class RegisterModel:
         isValid = len(errors) == 0
         return isValid, errors
 
-    def check_username(self, db):
-        sql = text("SELECT username FROM users WHERE username = :username LIMIT 1")
-        result = db.session.execute(sql, {"username": self.username})
-
-        user = result.fetchone()  # Fetch the first (and only) result
-
-        # Check if user exists
-        is_exist = user is not None
-        errorMessage = "Username already exists!" if is_exist else ""
-
-        return is_exist, errorMessage
-
     def hash_password(self):
         password_bytes = self.password.encode("utf-8")
         hashed_bytes = bcrypt.hashpw(password_bytes, bcrypt.gensalt())
         return hashed_bytes
 
-    def insert_account(self, db, hash_password):
-        sql = text(
-            "INSERT INTO users (name, username, password) VALUES (:name, :username, :password)"
-        )
-        db.session.execute(
-            sql,
-            {"name": self.name, "username": self.username, "password": hash_password},
-        )
-        db.session.commit()
 
-        return "Register successfully!"
-
-
-class LoginModel:
+class Loginmodel:
     MIN_INPUT_LENGTH = 5
 
     def __init__(self, username, password):
@@ -89,7 +65,11 @@ class LoginModel:
         return isValid, errors
 
     def check_password(self, password):
-        if bcrypt.checkpw(b"", password):
-            print("match")
-        else:
-            print("doesn't match")
+        bytes_pass = password.encode("utf-8")
+
+        hash_password = get_hashed_password(self.username)
+        bytes_hash_pass = hash_password.encode("utf-8")
+
+        if bcrypt.checkpw(bytes_pass, bytes_hash_pass):
+            return True
+        return False
