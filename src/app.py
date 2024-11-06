@@ -2,7 +2,6 @@ from flask import Flask
 from dotenv import load_dotenv
 from database import init_db, db
 import os
-from datetime import datetime
 from routes import bp
 
 load_dotenv()
@@ -25,21 +24,7 @@ def init_app():
 app = init_app()
 
 
-# Initial table for users
-class UserModel(db.Model):
-    __tablename__ = "users"
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(80), nullable=False)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password = db.Column(db.String(255), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now())
-    updated_at = db.Column(db.DateTime, default=datetime.now(), onupdate=datetime.now())
-
-    def __repr__(self):
-        return f"<User('{self.name}')>"
-
-
+# create table
 with app.app_context():
     db.create_all()
 
