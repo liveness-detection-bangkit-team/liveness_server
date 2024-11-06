@@ -14,6 +14,12 @@ python3 -m venv myenv
 source myenv/bin/activate
 ```
 
+### Install packages
+
+```bash
+pip install -r requirements.txt
+```
+
 ### Run Flask
 
 Run in development mode to listen every change
