@@ -12,7 +12,7 @@ def register_controller(request_json):
 
     valid, error_message = user.validate()
     if not valid:
-        return jsonify({"status_code": 400, "message": error_message}), 400
+        return jsonify({"status_code": 400, "message": error_message["error"]}), 400
 
     # check username exist
     username_exist = check_username(username)
@@ -38,7 +38,7 @@ def login_controller(request_json):
 
     valid, error_message = login.validate()
     if not valid:
-        return jsonify({"status-code": 400, "message": error_message}), 400
+        return jsonify({"status-code": 400, "message": error_message["error"]}), 400
 
     # check username exist
     username_exist = check_username(username)
@@ -55,5 +55,5 @@ def login_controller(request_json):
         ), 400
 
     # response successs
-    success_response = {"status_code": 200, "message": "Login successfully"}
+    success_response = {"status_code": 200, "message": "Login successfully!"}
     return jsonify(success_response), 200

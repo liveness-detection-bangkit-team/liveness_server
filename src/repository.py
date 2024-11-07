@@ -23,7 +23,7 @@ def insert_account(name, username, hash_password):
     )
     db.session.commit()
 
-    return "register successfully!"
+    return "Successfully created account!"
 
 
 def get_hashed_password(username):
