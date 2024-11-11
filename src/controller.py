@@ -1,6 +1,8 @@
 from service import RegisterModel, Loginmodel
-from flask import jsonify
+from flask import jsonify, make_response
 from repository import check_username, insert_account
+from helper import generate_jwt
+from variable import EXPIRES
 
 
 def register_controller(request_json):
@@ -10,13 +12,14 @@ def register_controller(request_json):
 
     user = RegisterModel(name, username, password)
 
+    # validate request JSON
     valid, error_message = user.validate()
     if not valid:
         return jsonify({"status_code": 400, "message": error_message["error"]}), 400
 
     # check username exist
-    username_exist = check_username(username)
-    if username_exist:
+    user_exist = check_username(username)
+    if user_exist:
         return jsonify({"status_code": 400, "message": "Username already exist!"}), 400
 
     # hash password
@@ -25,9 +28,22 @@ def register_controller(request_json):
     # insert user data to database
     success_message = insert_account(name, username, hash_password)
 
+    # create session token (cookies + jwt)
+    token = generate_jwt(user)
+
     # response success
-    response_message = {"status_code": 201, "message": success_message}
-    return jsonify(response_message), 201
+    success_message = (
+        jsonify({"status_code": 201, "message": success_message}),
+        200,
+    )
+    response = make_response(success_message)
+
+    # set cookie
+    response.set_cookie(
+        "X-LIVENESS-TOKEN", token, httponly=True, samesite="lax", expires=EXPIRES
+    )
+
+    return response
 
 
 def login_controller(request_json):
@@ -36,13 +52,14 @@ def login_controller(request_json):
 
     login = Loginmodel(username, password)
 
+    # validate request JSON
     valid, error_message = login.validate()
     if not valid:
         return jsonify({"status-code": 400, "message": error_message["error"]}), 400
 
-    # check username exist
-    username_exist = check_username(username)
-    if not username_exist:
+    # check username exist returning user id
+    user = check_username(username)
+    if not user:
         return jsonify(
             {"status_code": 400, "message": "Username or Password is wrong!"}
         ), 400
@@ -54,6 +71,28 @@ def login_controller(request_json):
             {"status_code": 400, "message": "Username or password is wrong!"}
         ), 400
 
+    # create session token (cookies + jwt)
+    token = generate_jwt(user)
+
     # response successs
-    success_response = {"status_code": 200, "message": "Login successfully!"}
-    return jsonify(success_response), 200
+    success_message = (
+        jsonify({"status_code": 200, "message": "Login successfully!"}),
+        200,
+    )
+    response = make_response(success_message)
+
+    # set cookie
+    response.set_cookie(
+        "X-LIVENESS-TOKEN", token, httponly=True, samesite="lax", expires=EXPIRES
+    )
+
+    return response
+
+
+def logout_controller():
+    response = make_response(jsonify({"message": "Logged out"}))
+
+    # Clear the JWT cookie
+    response.set_cookie("X-LIVENESS-TOKEN", "", expires=0)
+
+    return response

@@ -3,14 +3,15 @@ from database import db
 
 
 def check_username(username):
-    sql = text("SELECT username FROM users WHERE username = :username LIMIT 1")
+    sql = text("SELECT id FROM users WHERE username = :username LIMIT 1")
     result = db.session.execute(sql, {"username": username})
 
     user = result.fetchone()
 
-    is_exist = user is not None
-
-    return is_exist
+    if user is not None:
+        return user.id
+    else:
+        return None
 
 
 def insert_account(name, username, hash_password):
