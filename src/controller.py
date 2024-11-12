@@ -28,20 +28,12 @@ def register_controller(request_json):
     # insert user data to database
     success_message = insert_account(name, username, hash_password)
 
-    # create session token (cookies + jwt)
-    token = generate_jwt(user)
-
     # response success
     success_message = (
         jsonify({"status_code": 201, "message": success_message}),
         200,
     )
     response = make_response(success_message)
-
-    # set cookie
-    response.set_cookie(
-        "X-LIVENESS-TOKEN", token, httponly=True, samesite="lax", expires=EXPIRES
-    )
 
     return response
 
