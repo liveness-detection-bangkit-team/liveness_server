@@ -1,8 +1,49 @@
-# Back-end server for Liveness Detection Capstone Bangkit team!
+# Back-end server for Liveness Detection Capstone Bangkit team
 
 Repository for Back-end server for Liveness Detection company capstone team (Braincore)
 
 ## API Documentation
+
+url:
+
+### Response API
+
+Endpoint: GET /
+
+Response Success:
+
+```bash
+{
+  "status_code": 200,
+  "message": "You found me!"
+}
+```
+
+### Response API with Token required
+
+Endpoint: GET /home
+
+Request Cookies:
+
+- X-LIVENESS-TOKEN
+
+Response Success:
+
+```bash
+{
+  "status_code": 200,
+  "message": "Hello {fullname}"
+}
+```
+
+Response Failed:
+
+```bash
+{
+  "status_code": 401,
+  "message": "Unauthorized users"
+}
+```
 
 ### Register Account
 
@@ -12,7 +53,7 @@ Request Body:
 
 ```bash
 {
-  "name": "fullname",
+  "fullname": "fullname",
   "username": "username",
   "password": "password"
 }
@@ -54,6 +95,11 @@ Request Body:
 }
 ```
 
+> [!IMPORTANT]
+>
+> - The request body is mandatory.
+> - The request body must be at least 5 characters long.
+
 Response Body Success:
 
 ```bash
@@ -69,6 +115,23 @@ Response Body Failed:
 {
   "status_code": 400,
   "message": "Username and Password is required"
+}
+```
+
+### Logout Account
+
+Endpoint: POST /auth/logout
+
+Request Cookies:
+
+- X-LIVENESS-TOKEN
+
+Response Success:
+
+```bash
+{
+  "status_code": 200,
+  "message": "Logged out"
 }
 ```
 

@@ -1,5 +1,6 @@
 from sqlalchemy import text
 from database import db
+from datetime import datetime
 
 
 def check_username(username):
@@ -14,13 +15,19 @@ def check_username(username):
         return None
 
 
-def insert_account(name, username, hash_password):
+def insert_account(fullname, username, hash_password):
     sql = text(
-        "insert into users (name, username, password) values (:name, :username, :password)"
+        "insert into users (fullname, username, password, created_at, updated_at) values (:fullname, :username, :password, :created_at, :updated_at)"
     )
     db.session.execute(
         sql,
-        {"name": name, "username": username, "password": hash_password},
+        {
+            "fullname": fullname,
+            "username": username,
+            "password": hash_password,
+            "created_at": datetime.now().isoformat(),
+            "updated_at": datetime.now().isoformat(),
+        },
     )
     db.session.commit()
 
@@ -30,6 +37,15 @@ def insert_account(name, username, hash_password):
 def get_hashed_password(username):
     sql = text("SELECT password FROM users WHERE username = :username LIMIT 1")
     result = db.session.execute(sql, {"username": username})
+
+    row = result.fetchone()
+
+    return row[0] if row else None
+
+
+def get_fullname(user_id):
+    sql = text("SELECT fullname FROM users WHERE id = :id LIMIT 1")
+    result = db.session.execute(sql, {"id": user_id})
 
     row = result.fetchone()
 

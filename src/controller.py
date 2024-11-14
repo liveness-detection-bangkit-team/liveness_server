@@ -1,16 +1,17 @@
 from service import RegisterModel, Loginmodel
 from flask import jsonify, make_response
-from repository import check_username, insert_account
+from repository import check_username, insert_account, get_fullname
 from helper import generate_jwt
 from variable import EXPIRES
+from helper import decode_jwt
 
 
 def register_controller(request_json):
-    name = request_json.get("name")
+    fullname = request_json.get("fullname")
     username = request_json.get("username")
     password = request_json.get("password")
 
-    user = RegisterModel(name, username, password)
+    user = RegisterModel(fullname, username, password)
 
     # validate request JSON
     valid, error_message = user.validate()
@@ -26,7 +27,7 @@ def register_controller(request_json):
     hash_password = user.hash_password()
 
     # insert user data to database
-    success_message = insert_account(name, username, hash_password)
+    success_message = insert_account(fullname, username, hash_password)
 
     # response success
     success_message = (
@@ -82,9 +83,30 @@ def login_controller(request_json):
 
 
 def logout_controller():
-    response = make_response(jsonify({"message": "Logged out"}))
+    response = make_response(
+        jsonify({"status_code": 200, "message": "Logged out"}), 200
+    )
 
     # Clear the JWT cookie
     response.set_cookie("X-LIVENESS-TOKEN", "", expires=0)
 
+    return response
+
+
+def main_controller():
+    response = {"status_code": 200, "message": "You found me!"}
+    return jsonify(response), 200
+
+
+def home_controller(token):
+    # decode token
+    user_id = decode_jwt(token)
+
+    # get username
+    fullname = get_fullname(user_id)
+
+    response = (
+        jsonify({"status_code": 200, "message": f"Hello {fullname}"}),
+        200,
+    )
     return response

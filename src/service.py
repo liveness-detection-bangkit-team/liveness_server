@@ -5,16 +5,16 @@ from repository import get_hashed_password
 class RegisterModel:
     MIN_INPUT_LENGTH = 5
 
-    def __init__(self, name, username, password):
-        self.name = name
+    def __init__(self, fullname, username, password):
+        self.fullname = fullname
         self.username = username
         self.password = password
 
     def validate(self):
         errors = {}
 
-        if not self.name or not self.username or not self.password:
-            errors["error"] = "Name, Username, and Password is required"
+        if not self.fullname or not self.username or not self.password:
+            errors["error"] = "Fullname, Username, and Password is required"
 
         if errors:
             return False, errors
@@ -22,10 +22,10 @@ class RegisterModel:
         if (
             len(self.username) < self.MIN_INPUT_LENGTH
             or len(self.password) < self.MIN_INPUT_LENGTH
-            or len(self.name) < self.MIN_INPUT_LENGTH
+            or len(self.fullname) < self.MIN_INPUT_LENGTH
         ):
             errors["error"] = (
-                f"Name, Username, and Password at least {self.MIN_INPUT_LENGTH} characters"
+                f"Fullname, Username, and Password at least {self.MIN_INPUT_LENGTH} characters"
             )
 
         isValid = len(errors) == 0

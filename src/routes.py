@@ -1,6 +1,11 @@
-from controller import login_controller, register_controller, logout_controller
+from controller import (
+    login_controller,
+    register_controller,
+    logout_controller,
+    main_controller,
+    home_controller,
+)
 from flask import jsonify, request, Blueprint
-from helper import decode_jwt
 
 bp = Blueprint("main", __name__)
 
@@ -24,10 +29,14 @@ def logout():
 
 @bp.route("/", methods=["GET"])
 def main():
-    token = request.cookies.get("X-LIVENESS-TOKEN")
-    if token:
-        user_id = decode_jwt(token)
-        return jsonify({"message": f"Your user_id: {user_id}"})
+    return main_controller()
 
-    response = {"status_code": 200, "message": "You found me!"}
-    return jsonify(response), 200
+
+@bp.route("/home", methods=["GET"])
+def home():
+    token = request.cookies.get("X-LIVENESS-TOKEN")
+    if not token:
+        unauthorized_message = {"status_code": 401, "message": "Unauthorized users"}
+        return jsonify(unauthorized_message), 401
+
+    return home_controller(token)
