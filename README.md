@@ -120,7 +120,7 @@ Response Body Failed:
 
 ### Logout Account
 
-Endpoint: POST /auth/logout
+Endpoint: DELETE /auth/logout
 
 Request Cookies:
 
