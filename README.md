@@ -4,7 +4,7 @@ Repository for Back-end server for Liveness Detection company capstone team (Bra
 
 ## API Documentation
 
-url:
+url: https://liveness-server-653064696167.asia-southeast2.run.app/
 
 ### Response API
 
