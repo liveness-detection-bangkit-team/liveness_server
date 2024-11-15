@@ -1,5 +1,5 @@
 import jwt
-from variable import JWT_KEY, EXPIRES
+from src.variable import JWT_KEY, EXPIRES
 
 
 # generate JWT token for 30 minutes
