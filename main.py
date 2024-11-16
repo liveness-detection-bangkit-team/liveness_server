@@ -1,7 +1,7 @@
 from flask import Flask
-from database import init_db, db
-from routes import bp
-from variable import DATABASE_URL
+from src.database import init_db, db
+from src.routes import bp
+from src.variable import DATABASE_URL
 from flask_cors import CORS
 
 

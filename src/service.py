@@ -1,5 +1,5 @@
 import bcrypt
-from repository import get_hashed_password
+from src.repository import get_hashed_password
 
 
 class RegisterModel:
