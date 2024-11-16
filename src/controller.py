@@ -1,9 +1,9 @@
-from service import RegisterModel, Loginmodel
+from src.service import RegisterModel, Loginmodel
 from flask import jsonify, make_response
-from repository import check_username, insert_account, get_fullname
-from helper import generate_jwt
-from variable import EXPIRES
-from helper import decode_jwt
+from src.repository import check_username, insert_account, get_fullname
+from src.helper import generate_jwt
+from src.variable import EXPIRES
+from src.helper import decode_jwt
 
 
 def register_controller(request_json):

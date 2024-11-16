@@ -1,4 +1,4 @@
-from controller import (
+from src.controller import (
     login_controller,
     register_controller,
     logout_controller,

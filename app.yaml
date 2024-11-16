@@ -1,5 +1,1 @@
-runtime: python310
-
-handlers:
-  - url: /
-    script: src/app.py
+runtime: python312  # Specify your Python version
