@@ -32,7 +32,7 @@ def register_controller(request_json):
     # response success
     success_message = (
         jsonify({"status_code": 201, "message": success_message}),
-        200,
+        201,
     )
     response = make_response(success_message)
 
@@ -48,7 +48,7 @@ def login_controller(request_json):
     # validate request JSON
     valid, error_message = login.validate()
     if not valid:
-        return jsonify({"status-code": 400, "message": error_message["error"]}), 400
+        return jsonify({"status_code": 400, "message": error_message["error"]}), 400
 
     # check username exist returning user id
     user = check_username(username)
@@ -110,3 +110,4 @@ def home_controller(token):
         200,
     )
     return response
+

@@ -4,8 +4,6 @@ Repository for Back-end server for Liveness Detection company capstone team (Bra
 
 ## API Documentation
 
-url: https://liveness-server-653064696167.asia-southeast2.run.app/
-
 ### Response API
 
 Endpoint: GET /
@@ -160,6 +158,6 @@ pip install -r requirements.txt
 Run in development mode to listen every change
 
 ```bash
-export FLASK_APP=src/app.py
+export FLASK_APP=main.py
 flask --debug run -h 0.0.0.0
 ```
