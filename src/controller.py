@@ -2,7 +2,7 @@ from src.service import RegisterModel, Loginmodel
 from flask import jsonify, make_response
 from src.repository import check_username, insert_account, get_fullname
 from src.helper import generate_jwt
-from src.variable import EXPIRES
+from src.variable import MAX_AGE_TOKEN
 from src.helper import decode_jwt
 
 
@@ -76,7 +76,7 @@ def login_controller(request_json):
 
     # set cookie
     response.set_cookie(
-        "X-LIVENESS-TOKEN", token, httponly=True, samesite="lax", expires=EXPIRES
+        "X-LIVENESS-TOKEN", token, httponly=True, samesite="lax", max_age=MAX_AGE_TOKEN
     )
 
     return response
@@ -110,4 +110,3 @@ def home_controller(token):
         200,
     )
     return response
-

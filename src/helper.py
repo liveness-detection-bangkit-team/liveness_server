@@ -15,3 +15,4 @@ def decode_jwt(token):
     user_id = payload["user_id"]
 
     return user_id
+
