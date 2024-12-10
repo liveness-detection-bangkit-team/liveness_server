@@ -2,6 +2,10 @@
 
 Repository for Back-end server for Liveness Detection company capstone team (Braincore)
 
+## API Testing with Postman
+
+[Document Postman API Testing .JSON](https://drive.google.com/drive/folders/1JDTVO5UJxkEDDC-oeiTBSAfOMjsKiaUJ?usp=sharing)
+
 ## API Documentation
 
 ### Response API
